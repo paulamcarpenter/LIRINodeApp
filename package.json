@@ -1,0 +1,27 @@
+{
+  "name": "liriproject",
+  "version": "1.0.0",
+  "description": "liriproject",
+  "main": "liri.js",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.83.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulamcarpenter/LIRINodeApp.git"
+  },
+  "author": "Paula Carpenter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paulamcarpenter/LIRINodeApp/issues"
+  },
+  "homepage": "https://github.com/paulamcarpenter/LIRINodeApp#readme"
+}
