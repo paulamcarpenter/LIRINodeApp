@@ -1,16 +1,20 @@
 require('dotenv').config();
+
 var action = process.argv[2];
 var value = process.argv[3];
-var twitter = require('twitter');
-var keys = require(/../LIRINodeApp/keys.js);
-var client = new twitter(keys.twitterKeys);
-// var spotify = require('spotify');
+var keys = require('./keys.js');
+var Twitter = require('twitter');
+var client = new Twitter(keys.twitter);
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
 var params = {
     screen_name: 'PaulaCarpente16',
     count: 20
 	}
 var request = require('request');
 var fs = require('fs');
+var omdb = require('omdb');
+
 
 switch (action) {
 	case 'mytweets':
@@ -28,8 +32,11 @@ switch (action) {
 }
 
 function myTweets() {
+	console.log('myTweets()');
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
+		console.log('error', error);
 		if(!error && response.statusCode === 200) {
+			console.log('if(!error)');
 			fs.appendFile('terminal.log', ('=============== LOG ENTRY BEGIN ===============\r\n' + Date() + '\r\n \r\nTERMINAL COMMANDS:\r\n$: ' + process.argv + '\r\n \r\nDATA OUTPUT:\r\n'), function(err) {
 				if (err) throw err;
 			});
@@ -52,12 +59,29 @@ function myTweets() {
 	});
 }
 
-function spotifyThis(value) {
+function spotifyThis() {
+	// console.log('spotify value', value);
+	console.log('spotify()');
 	if (value == null) {
 		value = 'computer love';
 	}
+	spotify.search({ type: 'track', query: 'dancing in the moonlight' }, function(err, data) {
+	    if ( err ) {
+	        console.log('Error occurred: ' + err);
+	        return;
+	    }
+	 	console.log('data', data);
+
+	    // Do something with 'data' response.tracks.items[0].name
+	});
 	request('https://api.spotify.com/v1/search?q=' + value + '&type=track', function(error, response, body) {
+			// console.log('response', response);
+			console.log('error:', error != null);
+        	console.log('response:', response != null);
+        	console.log('body:', body != null);
+			// console.log('data', data);
 		if(!error && response.statusCode == 200) {
+
 			jsonBody = JSON.parse(body);
 			console.log('');
 			console.log('Artist: ' + jsonBody.tracks.items[0].name);
@@ -73,17 +97,22 @@ function spotifyThis(value) {
 	});
 }
 
-function omdbThis(value) {
+function omdbThis() {
+	console.log('omdb value', value);
 	if(value == null) {
 		value = 'wargames';
 	}
-	request('http://www.omdbapi.com/?t=' + value + '&tomatoes=true&r=json', function(error, response, body) {
+	request('http://www.omdbapi.com/?i=tt3896198&apikey=16c01db8' + value + '&tomatoes=true&r=json', function(error, response, body) {
+			console.log('error:', error != null);
+   			console.log('response:', response != null);
+   			console.log('body:', body != null);
+
 		if(!error && response.statusCode == 200) {
 			jsonBody = JSON.parse(body);
 			console.log('');
 			console.log('Title: ' + jsonBody.Title);
 			console.log('Year: ' + jsonBody.Year);
-			console.log('IMDb Raing: ' + jsonBody.imdbRating);
+			console.log('IMDb Rating: ' + jsonBody.imdbRating);
 			console.log('Country: ' + jsonBody.Country);
 			console.log('Language: ' + jsonBody.Language);
 			console.log('Plot: ' + jsonBody.Plot);
